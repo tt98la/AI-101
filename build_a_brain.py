@@ -3,21 +3,23 @@ import matplotlib.pyplot as plt
 import keras
 import numpy as np
 
+labels = ["T-shirt/top", "Trouser", "Pullover3", "Dress4", "Coat5", "Sandal6", "Shirt7", "Sneaker8", "Bag9", "Ankle boot"]
 epochs = 5
 model = keras.Sequential
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (valid_images, valid_labels) = fashion_mnist.load_data()
 number_of_classes = train_labels.max() + 1  # aka number of neurons / categories
-labels = ["T-shirt/top", "Trouser", "Pullover3", "Dress4", "Coat5", "Sandal6", "Shirt7", "Sneaker8", "Bag9", "Ankle boot"]
+indexes = [np.random.randint(0, len(train_images)) for i in range(10)]
+
+assert(number_of_classes == len(labels))
 
 def main():
     create_model()
     verify_model()
     train_model()
     
-    for i in range(10):
-        classify_image(np.random.randint(0, len(train_images)))
-
+    classify_images(indexes)
+    
 def create_model():
     #create the layers
     global model
@@ -42,7 +44,18 @@ def train_model():
         verbose=True,
         validation_data=(valid_images, valid_labels))
 
-def classify_image(data_idx=42):
+def classify_images(indexes):
+    print(">>>>>>>>>>> Individual Image Predictions <<<<<<<<<<<")
+    for idx in indexes:
+        classify_image_from_index(idx)
+
+    print(">>>>>>>>>>> Bulk Images Predictions <<<<<<<<<<<")
+    images = np.array([train_images[x] for x in indexes])
+    predictions = model.predict(images)
+    for pred in predictions:
+        print("correct answer:", labels[pred.argmax()])
+
+def classify_image_from_index(data_idx=42):
     plot_image(data_idx)
     pred = model.predict(train_images[data_idx:data_idx+1])
 
