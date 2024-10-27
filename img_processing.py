@@ -16,9 +16,9 @@ def main():
 
 def GetGrayImage(index: int | None=None, image_set=train_imgs):
     '''
-    Get an image from the image set.  If it's color (i.e. 3-D array), convert to grayscale (i.e. 2-D array)
-
-    If index is None, use a random image
+    Get an image from the image set.  
+    - If it's color (i.e. 3-D array), convert to grayscale (i.e. 2-D array)
+    - If index is None, use a random image
     '''
     
     rng = np.random.default_rng()
@@ -42,13 +42,14 @@ def BinarizeImage(image=train_imgs[42]):
 def ShowHistogram(image):
     '''
     Plot the histogram for the specified image.
-
-    Notice, there are a few options for getting the histogram:
+    - Notice, there are a few options for getting the histogram.
+    - For example, here I'm trying out:
         1. Numpy
         2. CV
         3. MatplotLib
 
-    MatplotLib's <i>hist()</i> function calculates and plots the histogram, whereas, with the others, it two separate instructions.
+    - MatplotLib's _hist()_ function handles both computing and plotting of the histogram
+    - With the others, they are separate operations
     '''
     
     # Numpy histogram()
@@ -75,6 +76,13 @@ def ShowSignal(image):
     plt.show()
 
 def ShowMontage(images):
+    '''
+    Creates a montage of the provided images.
+    - Note the use of Numpy's _concatenate()_ function.  
+      - In this case the images are simply appended to each other, increasing the image width.
+      - TODO: Append images such that the width and height are adjusted, keeping the montage square-ish
+    '''
+
     montage = np.concatenate(images, axis=1)
     plt.imshow(montage, cmap="gray")
     plt.show()
